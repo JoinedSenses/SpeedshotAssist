@@ -4,25 +4,16 @@
 #include <sourcemod>
 #include <sdktools>
 
-#undef REQUIRE_PLUGIN
-#include <updater>
-#define REQUIRE_PLUGIN
-
 #define PI 3.1415926535
 
 #define PLUGIN_VERSION "0.2.0"
 #define PLUGIN_DESCRIPTION "Tool to assist with speedshot timing and location"
-#define UPDATE_URL_BASE "http://raw.github.com/arispoloway/SpeedshotAssist"
-#define UPDATE_URL_BRANCH "master"
-#define UPDATE_URL_FILE "updatefile.txt"
 
 bool g_bEnabled[MAXPLAYERS+1];
 bool g_bLateLoad;
 
 int g_iBeamSprite;
 int g_iHaloSprite;
-
-char g_URLMap[256];
 
 public Plugin myinfo = {
 	name = "Speedshot Assist",
@@ -42,19 +33,9 @@ public void OnPluginStart() {
 
 	RegConsoleCmd("sm_ssa", cmdSSA);
 
-	Format(g_URLMap, sizeof(g_URLMap), "%s/master/%s", UPDATE_URL_BASE,UPDATE_URL_FILE);
-	if (LibraryExists("updater")) {
-		Updater_AddPlugin(g_URLMap);
-	}
-
 	if (g_bLateLoad) {
 		PrintToChatAll("\x01\x03SSA Reloaded");
 	}
-}
-
-public void Updater_OnPluginUpdated() {
-	LogMessage("Speedshot Assist Update complete.");
-	ReloadPlugin();
 }
 
 public void OnMapStart() {
